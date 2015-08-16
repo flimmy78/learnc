@@ -6,11 +6,10 @@ typedef struct Node *PtrToNode;
 typedef PtrToNode Stack;
 
 int IsEmpty(Stack S);
-int CreateStack(Stack S);
-
-struct Node
-{
-    ElementType Element;
-    PtrToNode Next;
-};
+Stack CreateStack(void);
+void Dispose(Stack S);
+void MakeEmpty(Stack S);
+void Push(ElementType X, Stack S);
+ElementType Top(Stack S);
+ElementType Pop(Stack S);
 #endif
