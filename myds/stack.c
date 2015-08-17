@@ -21,12 +21,12 @@ Stack CreateStack(void)
     return S;
 }
 
-int IsEmpty(Stack S)
+int StackIsEmpty(Stack S)
 {
     return S->Next == NULL;
 }
 
-void Push(ElementType X, Stack S)
+void PushStack(ElementType X, Stack S)
 {
    PtrToNode tmp;
    tmp = malloc(sizeof(struct Node));
@@ -40,19 +40,19 @@ void Push(ElementType X, Stack S)
    }
 }
 
-ElementType Top(Stack S)
+ElementType TopStack(Stack S)
 {
-    if(!IsEmpty(S))
+    if(!StackIsEmpty(S))
         return S->Next->Element;
     FatalError("Empty stack");
     return '\0';
 }
 
-ElementType Pop(Stack S)
+ElementType PopStack(Stack S)
 {
     PtrToNode tmp;
     ElementType X;
-    if(IsEmpty(S))
+    if(StackIsEmpty(S))
         return '\0';
 
     tmp = S->Next;
@@ -62,36 +62,94 @@ ElementType Pop(Stack S)
     return X;
 }
 
-void MakeEmpty(Stack S)
+void MakeEmptyStack(Stack S)
 {
-    if(IsEmpty(S))
-        FatalError("Empty stack");
+    if(StackIsEmpty(S))
+        printf("Stack is Empty \n");
 
-    while(!IsEmpty(S))
-        Pop(S);
+    while(!StackIsEmpty(S))
+        PopStack(S);
 }
 
-void Dispose( Stack S )
+void DisposeStack( Stack S )
 {
-    MakeEmpty( S );
+    MakeEmptyStack( S );
     free( S );
 }
 
-int main()
+int teststack()
 {
     ElementType c;
     Stack S;
 
     S = CreateStack();
     while( (c=getchar()) != 'D')
-        Push(c, S);
+        PushStack(c, S);
 
-    while(!IsEmpty(S))
+    while(!StackIsEmpty(S))
     {
-        c = Pop(S);
+        c = PopStack(S);
         printf("%c", c);
     }
         printf("\n");
-	DisposeStack( Stack S );
+	DisposeStack(S);
     return 0;
+}
+
+ElementType piarBracket(ElementType c)
+{
+	switch(c)
+	{
+	case '(':
+		return ')';
+		break;
+	case '[':
+		return ']';
+		break;
+	case '{':
+		return '}';
+		break;
+	default:
+		return '\0';
+		break;
+	}
+}
+
+void ChkBracket(void)
+{
+	ElementType *str = "abcd(efgi{3}";
+	ElementType c, ch;
+	Stack S;
+	S = CreateStack();
+	do
+	{
+		c = *str;
+		if (c=='(' || c=='[' || c=='{')
+		{
+			PushStack(c, S);
+		}
+		else if (c==')' || c==']' || c=='}')
+		{
+			if (StackIsEmpty(S))
+			{
+				printf("pair failed\n");
+				return;
+			}
+			else
+			{
+				ch = PopStack(S);
+				if (c != piarBracket(ch))
+				{
+					printf("pair failed\n");
+					return;
+				}
+			}
+		}
+	}while(*str++ != '\0');
+	if (!StackIsEmpty(S))
+	{
+		printf("pair failed\n");
+		return;
+	}
+	printf("pair OK\n");
 }

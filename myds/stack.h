@@ -5,11 +5,14 @@ struct Node;
 typedef struct Node *PtrToNode;
 typedef PtrToNode Stack;
 
-int IsEmpty(Stack S);
+int StackIsEmpty(Stack S);
 Stack CreateStack(void);
-void Dispose(Stack S);
-void MakeEmpty(Stack S);
-void Push(ElementType X, Stack S);
-ElementType Top(Stack S);
-ElementType Pop(Stack S);
+void DisposeStack(Stack S);
+void MakeEmptyStack(Stack S);
+void PushStack(ElementType X, Stack S);
+ElementType TopStack(Stack S);
+ElementType PopStack(Stack S);
+int teststack();
+ElementType piarBracket(ElementType c);
+void ChkBracket(void);
 #endif
