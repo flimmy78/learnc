@@ -1,130 +1,95 @@
-element: mp - 0x7fc9c8000b00, mp->prev - (nil), mp->num - 765, mp->next - 0x7fc9c8000ae0;
-element: mp - 0x7fc9c8000ae0, mp->prev - 0x7fc9c8000b00, mp->num - 672, mp->next - 0x7fc9c8000ac0;
-element: mp - 0x7fc9c8000ac0, mp->prev - 0x7fc9c8000ae0, mp->num - 74, mp->next - 0x7fc9c8000aa0;
-element: mp - 0x7fc9c8000aa0, mp->prev - 0x7fc9c8000ac0, mp->num - 120, mp->next - 0x7fc9c8000a80;
-element: mp - 0x7fc9c8000a80, mp->prev - 0x7fc9c8000aa0, mp->num - 808, mp->next - 0x7fc9c8000a60;
-element: mp - 0x7fc9c8000a60, mp->prev - 0x7fc9c8000a80, mp->num - 197, mp->next - 0x7fc9c8000a40;
-element: mp - 0x7fc9c8000a40, mp->prev - 0x7fc9c8000a60, mp->num - 422, mp->next - 0x7fc9c8000a20;
-element: mp - 0x7fc9c8000a20, mp->prev - 0x7fc9c8000a40, mp->num - 170, mp->next - 0x7fc9c8000a00;
-element: mp - 0x7fc9c8000a00, mp->prev - 0x7fc9c8000a20, mp->num - 470, mp->next - 0x7fc9c80009e0;
-element: mp - 0x7fc9c80009e0, mp->prev - 0x7fc9c8000a00, mp->num - 424, mp->next - 0x7fc9c80009c0;
-element: mp - 0x7fc9c80009c0, mp->prev - 0x7fc9c80009e0, mp->num - 242, mp->next - 0x7fc9c80009a0;
-element: mp - 0x7fc9c80009a0, mp->prev - 0x7fc9c80009c0, mp->num - 168, mp->next - 0x7fc9c8000980;
-element: mp - 0x7fc9c8000980, mp->prev - 0x7fc9c80009a0, mp->num - 839, mp->next - 0x7fc9c8000960;
-element: mp - 0x7fc9c8000960, mp->prev - 0x7fc9c8000980, mp->num - 195, mp->next - 0x7fc9c8000940;
-element: mp - 0x7fc9c8000940, mp->prev - 0x7fc9c8000960, mp->num - 402, mp->next - 0x7fc9c8000920;
-element: mp - 0x7fc9c8000920, mp->prev - 0x7fc9c8000940, mp->num - 690, mp->next - 0x7fc9c8000900;
-element: mp - 0x7fc9c8000900, mp->prev - 0x7fc9c8000920, mp->num - 261, mp->next - 0x7fc9c80008e0;
-element: mp - 0x7fc9c80008e0, mp->prev - 0x7fc9c8000900, mp->num - 668, mp->next - 0x7fc9c80008c0;
-element: mp - 0x7fc9c80008c0, mp->prev - 0x7fc9c80008e0, mp->num - 477, mp->next - (nil);
+#include <stdlib.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <sys/unistd.h>
 
-Produce 290
-------------List Start ----------
-element: mp - 0x7f865c0008c0, mp->prev - (nil), mp->num - 290, mp->next - (nil);
-head: 0x7f865c0008c0, tail: 0x7f865c0008c0
-------------List End ----------
-Produce 216
-------------List Start ----------
-element: mp - 0x7f865c0008e0, mp->prev - (nil), mp->num - 216, mp->next - 0x7f865c0008c0;
-head: 0x7f865c0008e0, tail: 0x7f865c0008c0
-element: mp - 0x7f865c0008c0, mp->prev - 0x7f865c0008e0, mp->num - 290, mp->next - (nil);
-head: 0x7f865c0008e0, tail: 0x7f865c0008c0
-------------List End ----------
-Produce 228
-------------List Start ----------
-element: mp - 0x7f865c000900, mp->prev - (nil), mp->num - 228, mp->next - 0x7f865c0008e0;
-head: 0x7f865c000900, tail: 0x7f865c0008c0
-element: mp - 0x7f865c0008e0, mp->prev - 0x7f865c000900, mp->num - 216, mp->next - 0x7f865c0008c0;
-head: 0x7f865c000900, tail: 0x7f865c0008c0
-element: mp - 0x7f865c0008c0, mp->prev - 0x7f865c0008e0, mp->num - 290, mp->next - (nil);
-head: 0x7f865c000900, tail: 0x7f865c0008c0
-------------List End ----------
-Produce 299
-------------List Start ----------
-element: mp - 0x7f865c000920, mp->prev - (nil), mp->num - 299, mp->next - 0x7f865c000900;
-head: 0x7f865c000920, tail: 0x7f865c0008c0
-element: mp - 0x7f865c000900, mp->prev - 0x7f865c000920, mp->num - 228, mp->next - 0x7f865c0008e0;
-head: 0x7f865c000920, tail: 0x7f865c0008c0
-element: mp - 0x7f865c0008e0, mp->prev - 0x7f865c000900, mp->num - 216, mp->next - 0x7f865c0008c0;
-head: 0x7f865c000920, tail: 0x7f865c0008c0
-element: mp - 0x7f865c0008c0, mp->prev - 0x7f865c0008e0, mp->num - 290, mp->next - (nil);
-head: 0x7f865c000920, tail: 0x7f865c0008c0
-------------List End ----------
-Produce 837
-------------List Start ----------
-element: mp - 0x7f865c000940, mp->prev - (nil), mp->num - 837, mp->next - 0x7f865c000920;
-head: 0x7f865c000940, tail: 0x7f865c0008c0
-element: mp - 0x7f865c000920, mp->prev - 0x7f865c000940, mp->num - 299, mp->next - 0x7f865c000900;
-head: 0x7f865c000940, tail: 0x7f865c0008c0
-element: mp - 0x7f865c000900, mp->prev - 0x7f865c000920, mp->num - 228, mp->next - 0x7f865c0008e0;
-head: 0x7f865c000940, tail: 0x7f865c0008c0
-element: mp - 0x7f865c0008e0, mp->prev - 0x7f865c000900, mp->num - 216, mp->next - 0x7f865c0008c0;
-head: 0x7f865c000940, tail: 0x7f865c0008c0
-element: mp - 0x7f865c0008c0, mp->prev - 0x7f865c0008e0, mp->num - 290, mp->next - (nil);
-head: 0x7f865c000940, tail: 0x7f865c0008c0
-------------List End ----------
-Produce 36
-------------List Start ----------
-element: mp - 0x7f865c000960, mp->prev - (nil), mp->num - 36, mp->next - 0x7f865c000940;
-head: 0x7f865c000960, tail: 0x7f865c0008c0
-element: mp - 0x7f865c000940, mp->prev - 0x7f865c000960, mp->num - 837, mp->next - 0x7f865c000920;
-head: 0x7f865c000960, tail: 0x7f865c0008c0
-element: mp - 0x7f865c000920, mp->prev - 0x7f865c000940, mp->num - 299, mp->next - 0x7f865c000900;
-head: 0x7f865c000960, tail: 0x7f865c0008c0
-element: mp - 0x7f865c000900, mp->prev - 0x7f865c000920, mp->num - 228, mp->next - 0x7f865c0008e0;
-head: 0x7f865c000960, tail: 0x7f865c0008c0
-element: mp - 0x7f865c0008e0, mp->prev - 0x7f865c000900, mp->num - 216, mp->next - 0x7f865c0008c0;
-head: 0x7f865c000960, tail: 0x7f865c0008c0
-element: mp - 0x7f865c0008c0, mp->prev - 0x7f865c0008e0, mp->num - 290, mp->next - (nil);
-head: 0x7f865c000960, tail: 0x7f865c0008c0
-------------List End ----------
+#define PRINT_LINE  printf("FILE: %s,  LINE: %d\n", __FILE__, __LINE__);
+#define CYCLE_TIME  (5)
+typedef struct msg {
+    struct msg *prev;
+    struct msg *next;
+    int num;
+} *pMsg;
 
-head is: (nil), tail is: (nil)
-Produce 922
-Consume 922
-Produce 809
-Produce 841
-Produce 724
-Consume 809
-Produce 625
-Produce 776
-Produce 328
-Produce 981
-Produce 959
-Consume 841
-Produce 717
-Produce 808
-Produce 791
-Produce 708
-Produce 213
-Produce 75
-Produce 864
-Produce 882
-Produce 72
-Consume 724
-Produce 292
-Produce 859
-Produce 111
-Produce 587
-Produce 296
-Produce 396
-Produce 965
-Produce 54
-Consume 625
-Consume 776
-Produce 432
-Produce 434
-Consume 328
-Produce 196
-Produce 923
-Produce 997
-Produce 737
-Produce 989
-Produce 456
-Produce 780
-Produce 994
-Consume 981
-Produce 242
-Produce 886
-Produce 936
+pMsg head;
+pMsg tail;
+pthread_cond_t has_product = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+void printList();
+void *consumer(void *p)
+{
+    struct msg *mp = NULL;
+    for (;;) {
+	pthread_mutex_lock(&lock);
+	while (head == NULL && tail == NULL) {
+	    printf("head is: %p, tail is: %p\n", head, tail);
+	    pthread_cond_wait(&has_product, &lock);
+	}
+	printList();
+	mp = tail;
+	//if tail point the first Node, tail->next is NULL, and tail->prev is also NULL!
+	//So, in this condition, tail point to NULL after statement "tail = tail->prev;"
+	//this happened before second node is produced, because consumer get the lock
+	tail = tail->prev;
+	PRINT_LINE if (tail) {
+	    tail->next = NULL;
+	PRINT_LINE}
+	pthread_mutex_unlock(&lock);
+	printf("Consume %d\n", mp->num);
+	free(mp);		//PRINT_LINE
+	sleep(rand() % CYCLE_TIME);
+    }
+}
 
+void *producer(void *p)
+{
+    struct msg *mp;
+    for (;;) {
+	mp = malloc(sizeof(struct msg));
+	mp->num = rand() % 1000 + 1;
+	printf("Produce %d\n", mp->num);
+	pthread_mutex_lock(&lock);
+	mp->prev = NULL;
+	mp->next = head;
+	if (tail == NULL) {	//if the first Node is consumed
+	    //before the second node is produced,
+	    //this statement arise tail to second node.
+	    tail = mp;
+	}
+	if (head)
+	    head->prev = mp;
+	head = mp;
+	printList();
+	pthread_mutex_unlock(&lock);
+	pthread_cond_signal(&has_product);
+
+	sleep(rand() % CYCLE_TIME);
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    head = tail = NULL;
+    pthread_t pid, cid;
+    srand(time(NULL));
+    pthread_create(&pid, NULL, producer, NULL);
+    pthread_create(&cid, NULL, consumer, NULL);
+    pthread_join(pid, NULL);
+    pthread_join(cid, NULL);
+    return 0;
+}
+
+void printList()
+{
+    pMsg mp=NULL;
+    printf("------------List Start ----------\n");
+    mp = head;
+    while (mp) {
+	printf
+	    ("element: mp - %p, mp->prev - %p, mp->num - %d, mp->next - %p;\n",
+	     mp, mp->prev, mp->num, mp->next);
+	printf("head: %p, tail: %p\n", head, tail);
+	mp = mp->next;
+    }
+    printf("------------List End ----------\n");
+}
