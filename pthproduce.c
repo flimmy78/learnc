@@ -25,17 +25,20 @@ void *consumer(void *p)
 	    printf("head is: %p, tail is: %p\n", head, tail);
 	    pthread_cond_wait(&has_product, &lock);
 	}
-	printList();
+	//printList();
 	mp = tail;
 	//if tail point the first Node, tail->next is NULL, and tail->prev is also NULL!
 	//So, in this condition, tail point to NULL after statement "tail = tail->prev;"
 	//this happened before second node is produced, because consumer get the lock
 	tail = tail->prev;
-	PRINT_LINE if (tail) {
+	if (tail) {//tail not point to first
 	    tail->next = NULL;
-	PRINT_LINE}
+	}
+    else //tail point to first, so after consume node, List is EMPTY!
+        head = NULL;//init List to NULL, so producer will add the next node to 
+                    //List and arise tail to it, add consumer will wait until List is Not EMPTY.
 	pthread_mutex_unlock(&lock);
-	printf("Consume %d\n", mp->num);
+	printf("Consume\t%d\n", mp->num);
 	free(mp);		//PRINT_LINE
 	sleep(rand() % CYCLE_TIME);
     }
@@ -47,7 +50,7 @@ void *producer(void *p)
     for (;;) {
 	mp = malloc(sizeof(struct msg));
 	mp->num = rand() % 1000 + 1;
-	printf("Produce %d\n", mp->num);
+	printf("Produce\t%d\n", mp->num);
 	pthread_mutex_lock(&lock);
 	mp->prev = NULL;
 	mp->next = head;
@@ -59,7 +62,7 @@ void *producer(void *p)
 	if (head)
 	    head->prev = mp;
 	head = mp;
-	printList();
+	//printList();
 	pthread_mutex_unlock(&lock);
 	pthread_cond_signal(&has_product);
 
