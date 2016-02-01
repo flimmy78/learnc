@@ -163,21 +163,20 @@ int main(int argc, char **argv)
         exit(1);
     }
     int iofd = open("/dev/CONTROL_IO", O_RDWR, 0);
-    ioctl(iofd, RS4852_C31, 1);
     while(1)
   	{  
-        ioctl(iofd,RS4852_C31,1);
-        printf("writting command: %s\n", command);
-        write(fd, command, 8);
-        usleep(500000);
+        //ioctl(iofd,RS4852_C31,1);
+        //printf("writting command: %s\n", command);
+        //write(fd, command, 8);
+        //usleep(500000);
         ioctl(iofd,RS4852_C31,0);
-   		usleep(500000);
-        //while((nread = read(fd,buff,512))>0)
-   		//{
-      		//printf("\nLen %d\n",nread);
-      		//buff[nread+1]='\0';
-      		//printf("\n%s",buff);
-   	 	//}
+   		//usleep(500000);
+        while((nread = read(fd,buff,512))>0)
+   		{
+      		printf("\nLen %d\n",nread);
+      		buff[nread+1]='\0';
+      		printf("\n%s",buff);
+   	 	}
   	}
     close(fd);
     exit(0);
