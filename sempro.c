@@ -14,7 +14,7 @@ void *producer(void *arg)
 	while (1) {
 		sem_wait(&blank_number);
 		queue[p] = rand() % 1000 + 1;
-		printf("Produce %d\n", queue[p]);
+		printf("Produce\t%d\n", queue[p]);
 		sem_post(&product_number);
 		p = (p+1)%NUM;
 		sleep(rand()%5);
@@ -26,7 +26,7 @@ void *consumer(void *arg)
 	int c = 0;
 	while (1) {
 		sem_wait(&product_number);
-		printf("Consume %d\n", queue[c]);
+		printf("Consume\t%d\n", queue[c]);
 		queue[c] = 0;
 		sem_post(&blank_number);
 		c = (c+1)%NUM;

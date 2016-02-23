@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
         timeout.tv_usec = 0;
     }
 
-    nfds = 0;
+    nfds = STDIN_FILENO;
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
 

@@ -139,43 +139,61 @@ int	fd = open( Dev, O_RDWR );         //| O_NOCTTY | O_NDELAY
 	else
 	    return fd;
 }
-/**
-*@breif 	main()
-*/
+
+int ascii_to_integer(char *string)
+{
+    int n = 0;
+    int result = 0;
+
+    while(*string != '\0')
+    {
+        if( (*string)<'0' || (*string)>'9' )
+            return 0;
+  
+        n = *string + (0 - '0');//ascii_to_integer
+        result = result * 10 + n;
+        string++;
+    }
+  
+    return result;
+}
+
 int main(int argc, char **argv)
 {
 	int fd;
 	int nread;
+    int speedcom;
 	char buff[512];
-    char command[100] = {0x01, 0x03, 0x00, 0x40, 0x00, 0x18, 0x44, 0x14};
-	fd = OpenDev(argv[1]);
-    printf("open tty: %s\n", argv[1]);
-	if (fd>0)
-    set_speed(fd,9600);
-	else
-	{
+    //char command[100] = {0x01, 0x03, 0x00, 0x40, 0x00, 0x18, 0x44, 0x14};
+    char *command = argv[3];
+	fd = OpenDev(argv[2]);
+    printf("open tty: %s\n", argv[2]);
+	if (fd>0) {
+        speedcom = ascii_to_integer(argv[1]);
+        printf("speedcom: %d\n", speedcom);
+        set_speed(fd,speedcom);
+    }
+	else {
     	printf("Can't Open Serial Port!\n");
 		exit(0);
 	}
-    if (set_Parity(fd,8,1,'N')== FALSE)
-    {
+    if (set_Parity(fd,8,1,'N')== FALSE) {
         printf("Set Parity Error\n");
         exit(1);
     }
-    int iofd = open("/dev/CONTROL_IO", O_RDWR, 0);
-    while(1)
-  	{  
-        //ioctl(iofd,RS4852_C31,1);
-        //printf("writting command: %s\n", command);
-        //write(fd, command, 8);
-        //usleep(500000);
-        ioctl(iofd,RS4852_C31,0);
-   		//usleep(500000);
+    ioctl(fd, RS4851_C30, 1);
+    while(1) {  
+        ioctl(fd,RS4851_C30,1);
+        printf("writting command: %s\n", command);
+        write(fd, command, 8);
+        usleep(500000);
+        ioctl(fd,RS4851_C30,0);
+   		usleep(500000);
         while((nread = read(fd,buff,512))>0)
    		{
-      		printf("\nLen %d\n",nread);
-      		buff[nread+1]='\0';
-      		printf("\n%s",buff);
+      	  printf("\nLen %d\n",nread);
+      	  buff[nread+1]='\0';
+      	  printf("\n%s",buff);
    	 	}
   	}
     close(fd);
