@@ -3,7 +3,7 @@ COPY		=cp
 CFLAGS		=-g -Wall
 LIBS		=-lpthread
 TARGET		=pthproduce sempro
-BINPATH		=./bin
+BINPATH		=$(PWD)/bin
 NFSROOT		=/nfsroot
 
 all: pthproduce sempro
