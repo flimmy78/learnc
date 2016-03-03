@@ -161,6 +161,7 @@ static void MDTestSuite ()
   MDString
  ("1234567890123456789012345678901234567890\
 1234567890123456789012345678901234567890");
+  MDString("863CA654");
 }
 
 /* Digests a file and prints the result.
