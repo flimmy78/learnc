@@ -7,6 +7,7 @@
 #include     <termios.h>    /*PPSIX终端控制定义*/
 #include     <errno.h>      /*错误号定义*/
 #include     <sys/ioctl.h>
+#include     <time.h>
 #define FALSE   -1
 #define TRUE    0
 #define IOCTLTEST_MAGIC  0xA4
@@ -164,14 +165,19 @@ int main(int argc, char **argv)
 	int nread;
     int speedcom;
 	char buff[512];
+    time_t nowtime;
+    time(&nowtime);
+	printf("%s",asctime(gmtime(&nowtime)));
     //char command[100] = {0x01, 0x03, 0x00, 0x40, 0x00, 0x18, 0x44, 0x14};
     char *command = argv[3];
 	fd = OpenDev(argv[2]);
+    printf("fd: %u\n", fd);
     printf("open tty: %s\n", argv[2]);
 	if (fd>0) {
         speedcom = ascii_to_integer(argv[1]);
         printf("speedcom: %d\n", speedcom);
         set_speed(fd,speedcom);
+        printf("open fd: %u\n", fd);
     }
 	else {
     	printf("Can't Open Serial Port!\n");
@@ -181,19 +187,29 @@ int main(int argc, char **argv)
         printf("Set Parity Error\n");
         exit(1);
     }
-    ioctl(fd, RS4851_C30, 1);
+    //ioctl(fd, RS4851_C30, 1);
+    //printf("writting command: %s\n", command);
+    //write(fd, command, sizeof(command));
+    //usleep(10000);
     while(1) {  
-        ioctl(fd,RS4851_C30,1);
-        printf("writting command: %s\n", command);
-        write(fd, command, 8);
-        usleep(500000);
-        ioctl(fd,RS4851_C30,0);
-   		usleep(500000);
-        while((nread = read(fd,buff,512))>0)
-   		{
-      	  printf("\nLen %d\n",nread);
-      	  buff[nread+1]='\0';
-      	  printf("\n%s",buff);
+        //ioctl(fd,RS4851_C30,1);
+        //printf("writting command: %s\n", command);
+        //write(fd, command, 8);
+        //usleep(500000);
+        //ioctl(fd,RS4851_C30,0);
+   		//usleep(500000);
+        //while((nread = read(fd,buff,512))>0)
+   		//{
+      	//  printf("\nLen %d\n",nread);
+      	//  buff[nread+1]='\0';
+      	//  printf("\n%s",buff);
+        //}
+        
+        while(nread = read(fd,buff,512)) {
+      	    buff[nread+1]='\0';
+            //printf("printf %s\n", buff);
+            //write(1,  buff, nread);
+            //write(fd, buff, nread);
    	 	}
   	}
     close(fd);
