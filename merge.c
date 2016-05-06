@@ -8,12 +8,11 @@ void merge(int start, int mid, int end)
     int n2 = end - mid;
     int left[n1], right[n2];
     int i, j, k;
-    for (i = 0; i < n1; i++)	/* left holds
-				   a[start..mid] */
-	left[i] = a[start + i];
-    for (j = 0; j < n2; j++)	/* right holds
-				   a[mid+1..end] */
+    for (i = 0; i < n1; i++)	/* left holds a[start..mid] */
+	    left[i] = a[start + i];
+    for (j = 0; j < n2; j++)	/* right holds a[mid+1..end] */
     	right[j] = a[mid + 1 + j];
+
     i = j = 0;
     k = start;
     while (i < n1 && j < n2)
@@ -21,6 +20,7 @@ void merge(int start, int mid, int end)
 	        a[k++] = left[i++];
 	    else
 	        a[k++] = right[j++];
+
     while (i < n1)		/* left[] is not exhausted */
 	    a[k++] = left[i++];
     while (j < n2)		/* right[] is not exhausted */

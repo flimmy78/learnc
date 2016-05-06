@@ -48,25 +48,25 @@ void *producer(void *p)
 {
     struct msg *mp;
     for (;;) {
-	mp = malloc(sizeof(struct msg));
-	mp->num = rand() % 1000 + 1;
-	printf("Produce\t%d\n", mp->num);
-	pthread_mutex_lock(&lock);
-	mp->prev = NULL;
-	mp->next = head;
-	if (tail == NULL) {	//if the first Node is consumed
-	    //before the second node is produced,
-	    //this statement arise tail to second node.
-	    tail = mp;
-	}
-	if (head)
-	    head->prev = mp;
-	head = mp;
-	//printList();
-	pthread_mutex_unlock(&lock);
-	pthread_cond_signal(&has_product);
-
-	sleep(rand() % CYCLE_TIME);
+    	mp = malloc(sizeof(struct msg));
+    	mp->num = rand() % 1000 + 1;
+    	printf("Produce\t%d\n", mp->num);
+    	pthread_mutex_lock(&lock);
+    	mp->prev = NULL;
+    	mp->next = head;
+    	if (tail == NULL) {	//if the first Node is consumed
+    	    //before the second node is produced,
+    	    //this statement arise tail to second node.
+    	    tail = mp;
+    	}
+    	if (head)
+    	    head->prev = mp;
+    	head = mp;
+    	//printList();
+    	pthread_mutex_unlock(&lock);
+    	pthread_cond_signal(&has_product);
+    
+    	sleep(rand() % CYCLE_TIME);
     }
 }
 
