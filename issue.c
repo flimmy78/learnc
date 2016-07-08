@@ -419,37 +419,46 @@ static void createFrame(U8 *sendBuf, U16 *sendLen, gateway_protocol_ptr pProto)
 	U8 *pHeadStart = NULL;//消息头起始位置, 用于计算消息头的校验值
 	U8 *pBodyStart = NULL;//消息体起始位置, 用于计算消息体的校验值
 	U16 u16dataLen = 0;
-
+	
+	printf("Line %d, Func createFrame\n", __LINE__);
 	memset(pTemp, GATEWAY_PREFIX, GATEWAY_PREFIX_CNT);//前导符
 	pTemp += GATEWAY_PREFIX_CNT;
 	*pTemp++ = GATEWAY_START;//起始符
 	pHeadStart = pTemp;
 	lenFrame += GATEWAY_PREFIX_CNT + GATEWAY_START_CNT;
 
+	printf("Line %d, Func createFrame\n", __LINE__);
 	*pTemp++ = PROTOCOL_VER;//版本号
 
+	printf("Line %d, Func createFrame\n", __LINE__);
 	memcpy(pTemp, pProto->SourceAddr, GATEWAY_SADD_LEN);//源地址
 	pTemp += GATEWAY_SADD_LEN;
 	memcpy(pTemp, pProto->DestAddr, GATEWAY_OADD_LEN);//目标地址
 	pTemp += GATEWAY_OADD_LEN;
 
+	printf("Line %d, Func createFrame\n", __LINE__);
 	*pTemp++ = pProto->MsgIndex;//MID 消息序列
 	memcpy(pTemp, pProto->MsgLen, GATEWAY_MSGL_LEN);//消息体长度
 	pTemp += GATEWAY_MSGL_LEN;
 	*pTemp++ = pProto->MsgType;//消息类型
 
+	printf("Line %d, Func createFrame\n", __LINE__);
 	memcpy(pTemp, pProto->ssmmhhDDMMYY, GATEWAY_TS_LEN);//时间
 	pTemp += GATEWAY_TS_LEN;
 
+	printf("Line %d, Func createFrame\n", __LINE__);
 	*pTemp++ = countCheck(pHeadStart, GATEWAY_HEAD_LEN);//消息头校验
 	pBodyStart = pTemp;//消息体校验字节预留
 
+	printf("Line %d, Func createFrame\n", __LINE__);
 	u16dataLen = (pProto->MsgLen[1] << 8 | pProto->MsgLen[0]);//消息体长度
+	printf("dataBody's Length: %d\n", u16dataLen);
 	memcpy(pTemp, pProto->MsgBody, u16dataLen);//消息体
 	pTemp += u16dataLen;
 	*pTemp++ = countCheck(pBodyStart, u16dataLen);//消息体校验
 	memset(pTemp, GATEWAY_SUFIX, GATEWAY_SUFIX_CNT);
 
+	printf("Line %d, Func createFrame\n", __LINE__);
 	lenFrame += (GATEWAY_HEAD_LEN + GATEWAY_HCK_LEN);//协议头长度+协议头校验长度
 	lenFrame += u16dataLen;//消息体长度
 	lenFrame += (GATEWAY_EC_LEN + GATEWAY_SUFIX_CNT);//消息体校验长度+结束符长度
@@ -464,47 +473,119 @@ U8 protoW_issueMinfo(U8* buf, U16* bufSize, U8* gatewayId, \
 	U16 len = 0;
 
     memset(protoStr.DestAddr, 0xff, 6);
-    memset(protoStr.SourceAddr, 0x11, 6);
+	protoStr.DestAddr[0] = 0x34;
+	protoStr.DestAddr[1] = 0x12;
+	protoStr.DestAddr[2] = 0x00;
+	protoStr.DestAddr[3] = 0x00;
+	protoStr.DestAddr[4] = 0x00;
+	protoStr.DestAddr[5] = 0x00;
+	
+	protoStr.SourceAddr[0] = 0x01;
+	protoStr.SourceAddr[1] = 0x00;
+	protoStr.SourceAddr[2] = 0x00;
+	protoStr.SourceAddr[3] = 0x00;
+	protoStr.SourceAddr[4] = 0x00;
+	protoStr.SourceAddr[5] = 0x00;
+	
 	protoStr.MsgIndex = pBodyHead->seq;
 
 	len = GATEWAY_METERINFO_LEN*pBodyHead->thisRows + sizeof(meterinfo_bodyHead_str);
+	
 	memcpy(protoStr.MsgLen, (U8*)&len, GATEWAY_MSGL_LEN);
-	inverseArray(protoStr.MsgLen, GATEWAY_MSGL_LEN);
-
+	printf("protoStr.MsgLen[0]: %02X, protoStr.MsgLen[1]: %02X\n", protoStr.MsgLen[0], protoStr.MsgLen[1]);
+	//inverseArray(protoStr.MsgLen, GATEWAY_MSGL_LEN);
+	//printf("protoStr.MsgLen[0]: %02X, protoStr.MsgLen[1]: %02X\n", protoStr.MsgLen[0], protoStr.MsgLen[1]);
+	printf("BodyLen: %d, 0x%04X; protoStr.MsgLen[0]: %02X, protoStr.MsgLen[1]: %02X\n", len, len, protoStr.MsgLen[0], protoStr.MsgLen[1]);
 	protoStr.MsgType = GAT_MT_SVR_SEND_MINFO;
 	readSysTime((sys_time_ptr)protoStr.ssmmhhDDMMYY);
-
+	printf("Line %d, Func protoW_issueMinfo\n", __LINE__);
 	memcpy(bufMsgBody, (U8*)pBodyHead, sizeof(meterinfo_bodyHead_str));//copy body head
+	printf("Line %d, Func protoW_issueMinfo\n", __LINE__);
 	memcpy(bufMsgBody + sizeof(meterinfo_bodyHead_str), (U8*)pProtoInfo, \
 	pBodyHead->thisRows*sizeof(meter_row_str));//copy message body
+	printf("Line %d, Func protoW_issueMinfo\n", __LINE__);
 	protoStr.MsgBody = bufMsgBody;
+	printf("Line %d, Func protoW_issueMinfo\n", __LINE__);
 	createFrame(buf, bufSize, &protoStr);
+	printf("Line %d, Func protoW_issueMinfo\n", __LINE__);
 	return NO_ERR;
 }
 
 int main(void)
 {
-	int i=0;
-    db_meterinfo_str dbinfoStr;
-    meter_row_str protoInfoStr;
+	int row = 0, i = 0;
+	U16 bufSize = 0;
+	U8 buf[1024] = { 0 };
 
-	strcpy(dbinfoStr.rowId , "1");
-	strcpy(dbinfoStr.meterAddr, "11110020160708");
-	strcpy(dbinfoStr.vendorId, "1");
-	strcpy(dbinfoStr.protoVer, "0");
-	strcpy(dbinfoStr.meterType, "20");
-	strcpy(dbinfoStr.channel, "1");
-	strcpy(dbinfoStr.valveProtoVer, "0");
-	strcpy(dbinfoStr.valveAddr, "11110020160709");
-	strcpy(dbinfoStr.controlPanelAddr, "11110020160709");
-	strcpy(dbinfoStr.buildId, "1");
-	strcpy(dbinfoStr.unitId, "4");
-	strcpy(dbinfoStr.roomId, "1102");
-	strcpy(dbinfoStr.gatewayId , "000000009017");
-	asciiToProtoBin(&dbinfoStr, &protoInfoStr);
-	printf("protoInfoStr: ");
-	for(i=0;i<sizeof(meter_row_str);i++) {
-		printf("%02X ", ((U8*)&protoInfoStr)[i]);
+	meterinfo_bodyHead_str bodyHeadStr;
+    db_meterinfo_ptr pDbInfo = malloc(3*sizeof(db_meterinfo_str));
+    meter_row_ptr pProtoInfo = malloc(3*sizeof(meter_row_str));
+	
+	memset(pDbInfo, 0, 3*sizeof(db_meterinfo_str));
+	memset(pProtoInfo, 0, 3*sizeof(meter_row_str));
+
+	strcpy(pDbInfo->rowId , "1");
+	strcpy(pDbInfo->meterAddr, "11110020160708");
+	strcpy(pDbInfo->vendorId, "1");
+	strcpy(pDbInfo->protoVer, "0");
+	strcpy(pDbInfo->meterType, "20");
+	strcpy(pDbInfo->channel, "1");
+	strcpy(pDbInfo->valveProtoVer, "0");
+	strcpy(pDbInfo->valveAddr, "11110020160709");
+	strcpy(pDbInfo->controlPanelAddr, "11110020160709");
+	strcpy(pDbInfo->buildId, "1");
+	strcpy(pDbInfo->unitId, "4");
+	strcpy(pDbInfo->roomId, "1102");
+	strcpy(pDbInfo->gatewayId , "000000009017");
+	
+	strcpy((pDbInfo+1)->rowId , "2");
+	strcpy((pDbInfo+1)->meterAddr, "11110020170808");
+	strcpy((pDbInfo+1)->vendorId, "1");
+	strcpy((pDbInfo+1)->protoVer, "0");
+	strcpy((pDbInfo+1)->meterType, "20");
+	strcpy((pDbInfo+1)->channel, "1");
+	strcpy((pDbInfo+1)->valveProtoVer, "0");
+	strcpy((pDbInfo+1)->valveAddr, "11110020170809");
+	strcpy((pDbInfo+1)->controlPanelAddr, "11110020170809");
+	strcpy((pDbInfo+1)->buildId, "2");
+	strcpy((pDbInfo+1)->unitId, "3");
+	strcpy((pDbInfo+1)->roomId, "1517");
+	strcpy((pDbInfo+1)->gatewayId , "000000009017");
+	
+	strcpy((pDbInfo+2)->rowId , "3");
+	strcpy((pDbInfo+2)->meterAddr, "11110020180908");
+	strcpy((pDbInfo+2)->vendorId, "1");
+	strcpy((pDbInfo+2)->protoVer, "0");
+	strcpy((pDbInfo+2)->meterType, "20");
+	strcpy((pDbInfo+2)->channel, "1");
+	strcpy((pDbInfo+2)->valveProtoVer, "0");
+	strcpy((pDbInfo+2)->valveAddr, "11110020180909");
+	strcpy((pDbInfo+2)->controlPanelAddr, "11110020180909");
+	strcpy((pDbInfo+2)->buildId, "4");
+	strcpy((pDbInfo+2)->unitId, "7");
+	strcpy((pDbInfo+2)->roomId, "0102");
+	strcpy((pDbInfo+2)->gatewayId , "000000009017");
+	
+	asciiToProtoBin(pDbInfo, pProtoInfo);
+	asciiToProtoBin(pDbInfo+1, pProtoInfo+1);
+	asciiToProtoBin(pDbInfo+2, pProtoInfo+2);
+	
+	for(row=0;row<3;row++){
+		printf("pProtoInfo[%d]: ", row);
+		for(i=0;i<sizeof(meter_row_str);i++) {
+			printf("%02X ", ((U8*)(pProtoInfo+row))[i]);
+		}
+		printf("\n");
+	}
+	
+	bodyHeadStr.totalRows = 3;
+	bodyHeadStr.seq = 0;
+	bodyHeadStr.thisRows = 3;
+	
+	protoW_issueMinfo(buf, &bufSize, NULL, &bodyHeadStr, pProtoInfo);
+	printf("buf: ", row);
+	for(i=0;i<bufSize;i++) {
+		printf("%02X ", buf[i]);
 	}
 	printf("\n");
     return 0;
